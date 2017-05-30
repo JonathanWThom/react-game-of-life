@@ -80,6 +80,7 @@ class Grid extends React.Component {
 
   newGeneration() {
     var newCells = [];
+    var newCellValues = [];
     for (let i = 0; i < this.state.cells.length; i ++) {
       let neighborsCount = this.neighbors(this.state.cells[i]);
       let x = this.state.cells[i].props.x;
@@ -87,10 +88,13 @@ class Grid extends React.Component {
       let livingState = this.state.cells[i].props.living;
 
       if (livingState && (neighborsCount === 2 || neighborsCount === 3)) {
+        newCellValues.push(true)
         newCells.push(this.renderCell(i, x, y, true, i))
       } else if (!livingState && neighborsCount === 3) {
+        newCellValues.push(true)
         newCells.push(this.renderCell(i, x, y, true, i))
       } else {
+        newCellValues.push(false)
         newCells.push(this.renderCell(i, x, y, false, i))
       }
     }
@@ -105,19 +109,43 @@ class Grid extends React.Component {
     var neighborsCount = 0;
     this.state.cells.map(function(cell) {
       if (cell.props.living) {
+        //neighbors are also on diagonals
         let cellXY = cell.props.x + cell.props.y
         let currentCellXY = currentCell.props.x + currentCell.props.y
+        let xDiffPositive = (cell.props.x - currentCell.props.x) === 1
+        let yDiffPositive = (cell.props.y - currentCell.props.y) === 1
+        let xDiffNegative = (currentCell.props.x - cell.props.x) === 1
+        let yDiffNegative = (currentCell.props.y - cell.props.y) === 1
         let lessThanOneAway = Math.abs(cellXY - currentCellXY) === 1
+        let positiveDiff = xDiffPositive && yDiffPositive
+        let negativeDiff = xDiffNegative && yDiffNegative
         let xAreEqual = cell.props.x === currentCell.props.x
         let yAreEqual = cell.props.y === currentCell.props.y
         let neighbors = lessThanOneAway && (xAreEqual || yAreEqual)
-        if (neighbors) {
+        let diagonalNeighbors = cellXY === currentCellXY
+        if (neighbors || diagonalNeighbors || positiveDiff || negativeDiff) {
           neighborsCount ++
         }
+        // let topLeft = ((currentCell.props.x - cell.props.x) === 1) && ((currentCell.props.y - cell.props.y) === 1)
+        // let topCenter = (currentCell.props.x === cell.props.x) && ((currentCell.props.y - cell.props.y) === 1)
+        // let topRight = ((currentCell.props.x - cell.props.x) === -1) && ((currentCell.props.y - cell.props.y) === 1)
+        // let middleLeft = ((currentCell.props.x - cell.props.x) === 1) && (currentCell.props.y === cell.props.y)
+        // let middleRight = ((currentCell.props.x - cell.props.x) === -1) && (currentCell.props.y === cell.props.y)
+        // let bottomLeft = ((currentCell.props.x - cell.props.x) === 1) && ((currentCell.props.y === cell.props.y) === -1)
+        // let bottomCenter = (currentCell.props.x === cell.props.x) && ((currentCell.props.y === cell.props.y) === -1)
+        // let bottomRight = ((currentCell.props.x === cell.props.x) === -1) && ((currentCell.props.y === cell.props.y) === -1)
+        // if (topLeft || topCenter || topRight || middleLeft || middleRight || bottomLeft || bottomCenter || bottomRight) {
+        //   neighborsCount++
+        // }
       }
     })
     return neighborsCount;
   }
+
+  //top left
+
+
+
 
   setButton() {
     if (this.state.gameRunning) {
