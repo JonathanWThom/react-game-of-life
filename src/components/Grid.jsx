@@ -112,18 +112,18 @@ class Grid extends React.Component {
         //neighbors are also on diagonals
         let cellXY = cell.props.x + cell.props.y
         let currentCellXY = currentCell.props.x + currentCell.props.y
-        let xDiffPositive = (cell.props.x - currentCell.props.x) === 1
-        let yDiffPositive = (cell.props.y - currentCell.props.y) === 1
-        let xDiffNegative = (currentCell.props.x - cell.props.x) === 1
-        let yDiffNegative = (currentCell.props.y - cell.props.y) === 1
+        // let xDiffPositive = (cell.props.x - currentCell.props.x) === 1
+        // let yDiffPositive = (cell.props.y - currentCell.props.y) === 1
+        // let xDiffNegative = (currentCell.props.x - cell.props.x) === 1
+        // let yDiffNegative = (currentCell.props.y - cell.props.y) === 1
         let lessThanOneAway = Math.abs(cellXY - currentCellXY) === 1
-        let positiveDiff = xDiffPositive && yDiffPositive
-        let negativeDiff = xDiffNegative && yDiffNegative
+        // let positiveDiff = xDiffPositive && yDiffPositive
+        // let negativeDiff = xDiffNegative && yDiffNegative
         let xAreEqual = cell.props.x === currentCell.props.x
         let yAreEqual = cell.props.y === currentCell.props.y
         let neighbors = lessThanOneAway && (xAreEqual || yAreEqual)
-        let diagonalNeighbors = cellXY === currentCellXY
-        if (neighbors || diagonalNeighbors || positiveDiff || negativeDiff) {
+        // let diagonalNeighbors = cellXY === currentCellXY
+        if (neighbors) {
           neighborsCount ++
         }
         // let topLeft = ((currentCell.props.x - cell.props.x) === 1) && ((currentCell.props.y - cell.props.y) === 1)
