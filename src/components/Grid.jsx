@@ -17,6 +17,12 @@ class Grid extends React.Component {
     this.setCells();
   }
 
+  renderCell(i, x, y, living, q) {
+    return (
+      <Cell key={i} x={x} y={y} living={living} onClick={() => this.toggleLiving(q)}/>
+    )
+  }
+
   startGame() {
     var gameInterval = setInterval(
       () => this.newGeneration(),
@@ -41,7 +47,7 @@ class Grid extends React.Component {
     for (let y = 1; y < 31; y++) {
       for (let x = 1; x < 31; x++) {
         let q = i;
-        cells.push(<Cell key={i} x={x} y={y} living={false} onClick={() => this.toggleLiving(q)}/>)
+        cells.push(this.renderCell(i, x, y, false, q))
         i++
       }
     }
@@ -60,7 +66,7 @@ class Grid extends React.Component {
     } else {
       living = true
     }
-    cells[q] = <Cell key={q} x={x} y={y} living={living} onClick={() => this.toggleLiving(q)}/>
+    cells[q] = this.renderCell(q, x, y, living, q)
     this.setState({
       cells: cells
     })
@@ -73,24 +79,24 @@ class Grid extends React.Component {
   }
 
   newGeneration() {
-    var cells = [];
+    var newCells = [];
     for (let i = 0; i < this.state.cells.length; i ++) {
-      let neighborsCount = this.neighbors(this.state.cells[i])
-      let x = this.state.cells[i].props.x
-      let y = this.state.cells[i].props.y
-      if (this.state.cells[i].props.living && (neighborsCount < 2)) {
-        cells.push(<Cell key={i} living={false} x={x} y={y} onClick={() => this.toggleLiving(i)}/>)
-      } else if (this.state.cells[i].props.living && (neighborsCount > 3)) {
-        cells.push(<Cell key={i} living={false} x={x} y={y} onClick={() => this.toggleLiving(i)}/>)
-      } else if (!this.state.cells[i].living && (neighborsCount === 3)) {
-        cells.push(<Cell key={i} living={true} x={x} y={y} onClick={() => this.toggleLiving(i)}/>)
+      let neighborsCount = this.neighbors(this.state.cells[i]);
+      let x = this.state.cells[i].props.x;
+      let y = this.state.cells[i].props.y;
+      let livingState = this.state.cells[i].props.living;
+
+      if (livingState && (neighborsCount === 2 || neighborsCount === 3)) {
+        newCells.push(this.renderCell(i, x, y, true, i))
+      } else if (!livingState && neighborsCount === 3) {
+        newCells.push(this.renderCell(i, x, y, true, i))
       } else {
-        let living = this.state.cells[i].props.living
-        cells.push(<Cell key={i} living={living} x={x} y={y} onClick={() => this.toggleLiving(i)}/>)
+        newCells.push(this.renderCell(i, x, y, false, i))
       }
     }
+
     this.setState({
-      cells: cells,
+      cells: newCells,
       generation: this.state.generation + 1
     })
   }
