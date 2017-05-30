@@ -1,3 +1,7 @@
+body {
+  line-height: 1.25 !important;
+}
+
 .cells {
   border: 1px black solid;
   height: 20px;
@@ -17,6 +21,6 @@
   background-color: green;
 }
 
-button {
+.btn {
   margin: 0 5px 0 5px;
 }
