@@ -1,0 +1,22 @@
+.cells {
+  border: 1px black solid;
+  height: 20px;
+  width: 20px;
+  margin-top: -5px;
+  display: inline-block;
+}
+
+.grid {
+  max-width: 600px;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.living {
+  background-color: green;
+}
+
+button {
+  margin: 0 5px 0 5px;
+}
