@@ -106,46 +106,27 @@ class Grid extends React.Component {
   }
 
   neighbors(currentCell) {
-    var neighborsCount = 0;
-    this.state.cells.map(function(cell) {
-      if (cell.props.living) {
-        //neighbors are also on diagonals
-        let cellXY = cell.props.x + cell.props.y
-        let currentCellXY = currentCell.props.x + currentCell.props.y
-        // let xDiffPositive = (cell.props.x - currentCell.props.x) === 1
-        // let yDiffPositive = (cell.props.y - currentCell.props.y) === 1
-        // let xDiffNegative = (currentCell.props.x - cell.props.x) === 1
-        // let yDiffNegative = (currentCell.props.y - cell.props.y) === 1
-        let lessThanOneAway = Math.abs(cellXY - currentCellXY) === 1
-        // let positiveDiff = xDiffPositive && yDiffPositive
-        // let negativeDiff = xDiffNegative && yDiffNegative
-        let xAreEqual = cell.props.x === currentCell.props.x
-        let yAreEqual = cell.props.y === currentCell.props.y
-        let neighbors = lessThanOneAway && (xAreEqual || yAreEqual)
-        // let diagonalNeighbors = cellXY === currentCellXY
-        if (neighbors) {
-          neighborsCount ++
-        }
-        // let topLeft = ((currentCell.props.x - cell.props.x) === 1) && ((currentCell.props.y - cell.props.y) === 1)
-        // let topCenter = (currentCell.props.x === cell.props.x) && ((currentCell.props.y - cell.props.y) === 1)
-        // let topRight = ((currentCell.props.x - cell.props.x) === -1) && ((currentCell.props.y - cell.props.y) === 1)
-        // let middleLeft = ((currentCell.props.x - cell.props.x) === 1) && (currentCell.props.y === cell.props.y)
-        // let middleRight = ((currentCell.props.x - cell.props.x) === -1) && (currentCell.props.y === cell.props.y)
-        // let bottomLeft = ((currentCell.props.x - cell.props.x) === 1) && ((currentCell.props.y === cell.props.y) === -1)
-        // let bottomCenter = (currentCell.props.x === cell.props.x) && ((currentCell.props.y === cell.props.y) === -1)
-        // let bottomRight = ((currentCell.props.x === cell.props.x) === -1) && ((currentCell.props.y === cell.props.y) === -1)
-        // if (topLeft || topCenter || topRight || middleLeft || middleRight || bottomLeft || bottomCenter || bottomRight) {
-        //   neighborsCount++
-        // }
+    var all_cells = this.state.cells,
+        neighborsCount = 0,
+        current_cell_index = all_cells.indexOf(currentCell),
+        that = this;
+
+    all_cells.map(function(cell, i) {
+      if (that.x_within_one(currentCell, cell) && that.y_within_one(currentCell, cell) && (i !== current_cell_index)) {
+        neighborsCount++;
       }
     })
+
     return neighborsCount;
   }
 
-  //top left
+  x_within_one(currentCell, cell) {
+    Math.abs(currentCell.props.x - cell.props.x) <= 1;
+  }
 
-
-
+  y_within_one(currentCell, cell) {
+    Math.abs(currentCell.props.y - cell.props.y) <= 1;
+  }
 
   setButton() {
     if (this.state.gameRunning) {
